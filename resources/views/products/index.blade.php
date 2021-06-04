@@ -24,7 +24,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">Price Range</span>
                         </div>
-                        <input type="text" name="price_from" aria-label="First name" placeholder="From" class="form-control">
+                        <input type="text" name="price_from" aria-label="First name" placeholder="From"
+                               class="form-control">
                         <input type="text" name="price_to" aria-label="Last name" placeholder="To" class="form-control">
                     </div>
                 </div>
@@ -53,6 +54,57 @@
                     <tbody>
 
                     <tr>
+                        @foreach($products as $product)
+                            <td>{{$loop->index + 1 }}</td>
+                            <td>{{$product->title}} <br> Created at : {{$product->created_at}}</td>
+                            <td>{{$product->description}}</td>
+                            <td>
+                                @foreach($product->productVariants as $productVariant)
+                                    <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">
+
+                                        <dt class="col-sm-3 pb-0">
+                                            {{$productVariant->variant}}
+                                        </dt>
+                                        @if($productVariant->variantOne()->exists())
+                                            <dd class="col-sm-9">
+                                                <dl class="row mb-0">
+                                                    <dt class="col-sm-4 pb-0">Price : {{ number_format($productVariant->variantOne->price,2) }}</dt>
+                                                    <dd class="col-sm-8 pb-0">InStock : {{ number_format($productVariant->variantOne->stock,2) }}</dd>
+                                                </dl>
+                                            </dd>
+                                        @endif
+                                        @if($productVariant->variantTwo()->exists())
+                                            <dd class="col-sm-9">
+                                                <dl class="row mb-0">
+                                                    <dt class="col-sm-4 pb-0">Price : {{ number_format($productVariant->variantTwo->price,2) }}</dt>
+                                                    <dd class="col-sm-8 pb-0">InStock : {{ number_format($productVariant->variantTwo->stock,2) }}</dd>
+                                                </dl>
+                                            </dd>
+                                        @endif
+                                        @if($productVariant->variantThree()->exists())
+                                            <dd class="col-sm-9">
+                                                <dl class="row mb-0">
+                                                    <dt class="col-sm-4 pb-0">Price : {{ number_format($productVariant->variantThree->price,2) }}</dt>
+                                                    <dd class="col-sm-8 pb-0">InStock : {{ number_format($productVariant->variantThree->stock,2) }}</dd>
+                                                </dl>
+                                            </dd>
+                                        @endif
+                                    </dl>
+                                @endforeach
+                                <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show
+                                    more
+                                </button>
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ route('product.edit', $product->id) }}" class="btn btn-success">Edit</a>
+                                </div>
+                            </td>
+
+                        @endforeach
+                    </tr>
+
+                    <tr>
                         <td>1</td>
                         <td>T-Shirt <br> Created at : 25-Aug-2020</td>
                         <td>Quality product in low cost</td>
@@ -69,7 +121,9 @@
                                     </dl>
                                 </dd>
                             </dl>
-                            <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show more</button>
+                            <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show
+                                more
+                            </button>
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm">
