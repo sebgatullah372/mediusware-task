@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductVariant extends Model
 {
-    public function variant()
+    public function variants()
     {
 
-        return $this->belongsTo('App\Models\Variant');
+        return $this->belongsTo('App\Models\Variant', 'variant_id');
     }
 
     public function product()
@@ -20,17 +20,17 @@ class ProductVariant extends Model
 
     public function variantOne()
     {
-        return $this->hasOne('App\Models\ProductVariantPrice', 'product_variant_one', 'id');
+        return $this->hasMany('App\Models\ProductVariantPrice', 'product_variant_one', 'id');
     }
 
     public function variantTwo()
     {
-        return $this->hasOne('App\Models\ProductVariantPrice', 'product_variant_two', 'id');
+        return $this->hasMany('App\Models\ProductVariantPrice', 'product_variant_two', 'id');
     }
 
     public function variantThree()
     {
-        return $this->hasOne('App\Models\ProductVariantPrice', 'product_variant_three', 'id');
+        return $this->hasMany('App\Models\ProductVariantPrice', 'product_variant_three', 'id');
     }
 
 

@@ -8,15 +8,25 @@
 
 
     <div class="card">
-        <form action="" method="get" class="card-header">
+        <form action="{{route('filter_products')}}" method="get" class="card-header">
+            @csrf
             <div class="form-row justify-content-between">
                 <div class="col-md-2">
                     <input type="text" name="title" placeholder="Product Title" class="form-control">
                 </div>
                 <div class="col-md-2">
-                    <select name="variant" id="" class="form-control">
 
+                    <select name="variant" id="" class="form-control">
+                        <option value="">Select variant</option>
+                        @foreach($variants as $variant)
+                            <option value="">{{$variant->title}}</option>
+                            @foreach($variant->productVariants as $productVariant)
+                            <option
+                                value="{{$productVariant->variant_id}}">{{$productVariant->variant}}</option>
+                            @endforeach
+                        @endforeach
                     </select>
+
                 </div>
 
                 <div class="col-md-3">
@@ -53,44 +63,64 @@
 
                     <tbody>
                     @foreach($products as $product)
-                    <tr>
+                        <tr>
                             <td>{{$loop->index + 1 }}</td>
                             <td>{{$product->title}} <br> Created at : {{$product->created_at}}</td>
                             <td>{{$product->description}}</td>
                             <td>
                                 @foreach($product->productVariants as $productVariant)
-                                    <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant{{$loop->index + 1}}">
+                                    <dl class="row mb-0" style="height: 80px; overflow: hidden"
+                                        id="variant{{$loop->index + 1}}">
 
                                         <dt class="col-sm-3 pb-0">
                                             {{$productVariant->variant}}
                                         </dt>
                                         @if($productVariant->variantOne()->exists())
+
                                             <dd class="col-sm-9">
                                                 <dl class="row mb-0">
-                                                    <dt class="col-sm-4 pb-0">Price : {{ number_format($productVariant->variantOne->price,2) }}</dt>
-                                                    <dd class="col-sm-8 pb-0">InStock : {{ number_format($productVariant->variantOne->stock,2) }}</dd>
+                                                    @foreach($productVariant->variantOne as $productVariantOne)
+                                                        <dt class="col-sm-4 pb-0">Price
+                                                            : {{ number_format($productVariantOne->price,2) }}</dt>
+                                                        <dd class="col-sm-8 pb-0">InStock
+                                                            : {{ number_format($productVariantOne->stock,2) }}</dd>
+                                                    @endforeach
                                                 </dl>
                                             </dd>
+
                                         @endif
                                         @if($productVariant->variantTwo()->exists())
+
                                             <dd class="col-sm-9">
                                                 <dl class="row mb-0">
-                                                    <dt class="col-sm-4 pb-0">Price : {{ number_format($productVariant->variantTwo->price,2) }}</dt>
-                                                    <dd class="col-sm-8 pb-0">InStock : {{ number_format($productVariant->variantTwo->stock,2) }}</dd>
+                                                    @foreach($productVariant->variantTwo as $productVariantTwo)
+                                                        <dt class="col-sm-4 pb-0">Price
+                                                            : {{ number_format($productVariantTwo->price,2) }}</dt>
+                                                        <dd class="col-sm-8 pb-0">InStock
+                                                            : {{ number_format($productVariantTwo->stock,2) }}</dd>
+                                                    @endforeach
                                                 </dl>
                                             </dd>
+
                                         @endif
                                         @if($productVariant->variantThree()->exists())
+
                                             <dd class="col-sm-9">
                                                 <dl class="row mb-0">
-                                                    <dt class="col-sm-4 pb-0">Price : {{ number_format($productVariant->variantThree->price,2) }}</dt>
-                                                    <dd class="col-sm-8 pb-0">InStock : {{ number_format($productVariant->variantThree->stock,2) }}</dd>
+                                                    @foreach($productVariant->variantThree as $productVariantThree)
+                                                        <dt class="col-sm-4 pb-0">Price
+                                                            : {{ number_format($productVariantThree->price,2) }}</dt>
+                                                        <dd class="col-sm-8 pb-0">InStock
+                                                            : {{ number_format($productVariantThree->stock,2) }}</dd>
+                                                    @endforeach
                                                 </dl>
                                             </dd>
+
                                         @endif
                                     </dl>
                                 @endforeach
-                                <button onclick="$('#variant{{$loop->index + 1}}').toggleClass('h-auto')" class="btn btn-sm btn-link">Show
+                                <button onclick="$('#variant{{$loop->index + 1}}').toggleClass('h-auto')"
+                                        class="btn btn-sm btn-link">Show
                                     more
                                 </button>
                             </td>
@@ -101,36 +131,36 @@
                             </td>
 
 
-                    </tr>
+                        </tr>
                     @endforeach
 
-{{--                    <tr>--}}
-{{--                        <td>1</td>--}}
-{{--                        <td>T-Shirt <br> Created at : 25-Aug-2020</td>--}}
-{{--                        <td>Quality product in low cost</td>--}}
-{{--                        <td>--}}
-{{--                            <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">--}}
+                    {{--                    <tr>--}}
+                    {{--                        <td>1</td>--}}
+                    {{--                        <td>T-Shirt <br> Created at : 25-Aug-2020</td>--}}
+                    {{--                        <td>Quality product in low cost</td>--}}
+                    {{--                        <td>--}}
+                    {{--                            <dl class="row mb-0" style="height: 80px; overflow: hidden" id="variant">--}}
 
-{{--                                <dt class="col-sm-3 pb-0">--}}
-{{--                                    SM/ Red/ V-Nick--}}
-{{--                                </dt>--}}
-{{--                                <dd class="col-sm-9">--}}
-{{--                                    <dl class="row mb-0">--}}
-{{--                                        <dt class="col-sm-4 pb-0">Price : {{ number_format(200,2) }}</dt>--}}
-{{--                                        <dd class="col-sm-8 pb-0">InStock : {{ number_format(50,2) }}</dd>--}}
-{{--                                    </dl>--}}
-{{--                                </dd>--}}
-{{--                            </dl>--}}
-{{--                            <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show--}}
-{{--                                more--}}
-{{--                            </button>--}}
-{{--                        </td>--}}
-{{--                        <td>--}}
-{{--                            <div class="btn-group btn-group-sm">--}}
-{{--                                <a href="{{ route('product.edit', 1) }}" class="btn btn-success">Edit</a>--}}
-{{--                            </div>--}}
-{{--                        </td>--}}
-{{--                    </tr>--}}
+                    {{--                                <dt class="col-sm-3 pb-0">--}}
+                    {{--                                    SM/ Red/ V-Nick--}}
+                    {{--                                </dt>--}}
+                    {{--                                <dd class="col-sm-9">--}}
+                    {{--                                    <dl class="row mb-0">--}}
+                    {{--                                        <dt class="col-sm-4 pb-0">Price : {{ number_format(200,2) }}</dt>--}}
+                    {{--                                        <dd class="col-sm-8 pb-0">InStock : {{ number_format(50,2) }}</dd>--}}
+                    {{--                                    </dl>--}}
+                    {{--                                </dd>--}}
+                    {{--                            </dl>--}}
+                    {{--                            <button onclick="$('#variant').toggleClass('h-auto')" class="btn btn-sm btn-link">Show--}}
+                    {{--                                more--}}
+                    {{--                            </button>--}}
+                    {{--                        </td>--}}
+                    {{--                        <td>--}}
+                    {{--                            <div class="btn-group btn-group-sm">--}}
+                    {{--                                <a href="{{ route('product.edit', 1) }}" class="btn btn-success">Edit</a>--}}
+                    {{--                            </div>--}}
+                    {{--                        </td>--}}
+                    {{--                    </tr>--}}
 
                     </tbody>
 
@@ -146,7 +176,7 @@
                 </div>
                 <div class="col-md-2">
 
-                      {{$products->links()}}
+                    {{$products->links()}}
                 </div>
             </div>
         </div>
